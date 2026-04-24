@@ -1,0 +1,129 @@
+{
+  "modules": [
+    {
+      "id": "01",
+      "title": "Getting Started with QuickBooks",
+      "description": "Master the fundamentals of QuickBooks setup, navigation, and configuration to build a solid foundation.",
+      "icon": "bi-house-door",
+      "color": "#16a34a",
+      "lessons": [
+        {"id": "01", "title": "QuickBooks Online vs. Desktop: Which Is Right for You?", "duration": "12 min", "file": "01/01.md"},
+        {"id": "02", "title": "Setting Up Your Company File", "duration": "15 min", "file": "01/02.md"},
+        {"id": "03", "title": "Navigating the Dashboard", "duration": "10 min", "file": "01/03.md"},
+        {"id": "04", "title": "Chart of Accounts: Your Financial Blueprint", "duration": "18 min", "file": "01/04.md"},
+        {"id": "05", "title": "Users, Roles, and Permissions", "duration": "12 min", "file": "01/05.md"}
+      ]
+    },
+    {
+      "id": "02",
+      "title": "Banking & Cash Management",
+      "description": "Connect your bank accounts, manage transactions, and master the art of reconciliation.",
+      "icon": "bi-bank",
+      "color": "#0ea5e9",
+      "lessons": [
+        {"id": "01", "title": "Connecting Your Bank Accounts", "duration": "10 min", "file": "02/01.md"},
+        {"id": "02", "title": "Using Bank Feeds to Import Transactions", "duration": "12 min", "file": "02/02.md"},
+        {"id": "03", "title": "Categorizing and Reviewing Transactions", "duration": "15 min", "file": "02/03.md"},
+        {"id": "04", "title": "Creating Bank Rules for Auto-Categorization", "duration": "12 min", "file": "02/04.md"},
+        {"id": "05", "title": "Reconciling Your Accounts", "duration": "20 min", "file": "02/05.md"},
+        {"id": "06", "title": "Managing Petty Cash and Cash Transactions", "duration": "10 min", "file": "02/06.md"}
+      ]
+    },
+    {
+      "id": "03",
+      "title": "Customers & Sales (Accounts Receivable)",
+      "description": "Manage your entire sales cycle from estimates to deposits, and keep your receivables healthy.",
+      "icon": "bi-people",
+      "color": "#8b5cf6",
+      "lessons": [
+        {"id": "01", "title": "Setting Up and Managing Customers", "duration": "12 min", "file": "03/01.md"},
+        {"id": "02", "title": "Products and Services Setup", "duration": "12 min", "file": "03/02.md"},
+        {"id": "03", "title": "Creating Estimates and Quotes", "duration": "10 min", "file": "03/03.md"},
+        {"id": "04", "title": "Creating and Sending Invoices", "duration": "15 min", "file": "03/04.md"},
+        {"id": "05", "title": "Recording Payments Received", "duration": "10 min", "file": "03/05.md"},
+        {"id": "06", "title": "Sales Receipts for Immediate Payment", "duration": "8 min", "file": "03/06.md"},
+        {"id": "07", "title": "Credit Memos and Refunds", "duration": "10 min", "file": "03/07.md"},
+        {"id": "08", "title": "Making Bank Deposits", "duration": "10 min", "file": "03/08.md"},
+        {"id": "09", "title": "Managing Overdue Accounts: AR Aging", "duration": "12 min", "file": "03/09.md"}
+      ]
+    },
+    {
+      "id": "04",
+      "title": "Vendors & Expenses (Accounts Payable)",
+      "description": "Track every dollar going out — from bills to expenses to contractor payments.",
+      "icon": "bi-receipt",
+      "color": "#f97316",
+      "lessons": [
+        {"id": "01", "title": "Setting Up and Managing Vendors", "duration": "10 min", "file": "04/01.md"},
+        {"id": "02", "title": "Purchase Orders", "duration": "12 min", "file": "04/02.md"},
+        {"id": "03", "title": "Entering and Paying Bills", "duration": "15 min", "file": "04/03.md"},
+        {"id": "04", "title": "Tracking Expenses and Receipts", "duration": "12 min", "file": "04/04.md"},
+        {"id": "05", "title": "Managing Credit Cards in QuickBooks", "duration": "12 min", "file": "04/05.md"},
+        {"id": "06", "title": "1099 Contractor Tracking", "duration": "12 min", "file": "04/06.md"},
+        {"id": "07", "title": "Accounts Payable Aging Report", "duration": "8 min", "file": "04/07.md"}
+      ]
+    },
+    {
+      "id": "05",
+      "title": "Payroll",
+      "description": "Set up and run payroll correctly, stay compliant with taxes, and handle year-end forms.",
+      "icon": "bi-person-check",
+      "color": "#ec4899",
+      "lessons": [
+        {"id": "01", "title": "Setting Up Payroll in QuickBooks", "duration": "15 min", "file": "05/01.md"},
+        {"id": "02", "title": "Adding and Managing Employees", "duration": "12 min", "file": "05/02.md"},
+        {"id": "03", "title": "Running Payroll Step by Step", "duration": "15 min", "file": "05/03.md"},
+        {"id": "04", "title": "Understanding Payroll Taxes", "duration": "18 min", "file": "05/04.md"},
+        {"id": "05", "title": "Setting Up Direct Deposit", "duration": "8 min", "file": "05/05.md"},
+        {"id": "06", "title": "Payroll Reports", "duration": "10 min", "file": "05/06.md"},
+        {"id": "07", "title": "Year-End: W-2s and 1099s", "duration": "15 min", "file": "05/07.md"}
+      ]
+    },
+    {
+      "id": "06",
+      "title": "Reports & Financial Analysis",
+      "description": "Read and interpret your financial statements to make smart, data-driven business decisions.",
+      "icon": "bi-bar-chart",
+      "color": "#14b8a6",
+      "lessons": [
+        {"id": "01", "title": "Profit & Loss (Income Statement)", "duration": "18 min", "file": "06/01.md"},
+        {"id": "02", "title": "Balance Sheet", "duration": "18 min", "file": "06/02.md"},
+        {"id": "03", "title": "Statement of Cash Flows", "duration": "15 min", "file": "06/03.md"},
+        {"id": "04", "title": "AR and AP Aging Reports", "duration": "10 min", "file": "06/04.md"},
+        {"id": "05", "title": "Sales and Expense Reports", "duration": "12 min", "file": "06/05.md"},
+        {"id": "06", "title": "Budget vs. Actuals", "duration": "12 min", "file": "06/06.md"},
+        {"id": "07", "title": "Customizing and Saving Reports", "duration": "10 min", "file": "06/07.md"},
+        {"id": "08", "title": "Exporting and Sharing Reports", "duration": "8 min", "file": "06/08.md"}
+      ]
+    },
+    {
+      "id": "07",
+      "title": "Advanced Features",
+      "description": "Take your QuickBooks skills to the next level with classes, projects, and automation.",
+      "icon": "bi-stars",
+      "color": "#a855f7",
+      "lessons": [
+        {"id": "01", "title": "Classes and Locations for Tracking", "duration": "12 min", "file": "07/01.md"},
+        {"id": "02", "title": "Projects and Job Costing", "duration": "15 min", "file": "07/02.md"},
+        {"id": "03", "title": "Recurring Transactions", "duration": "10 min", "file": "07/03.md"},
+        {"id": "04", "title": "Journal Entries Explained", "duration": "15 min", "file": "07/04.md"},
+        {"id": "05", "title": "Inventory Tracking Basics", "duration": "15 min", "file": "07/05.md"},
+        {"id": "06", "title": "Time Tracking and Billable Hours", "duration": "12 min", "file": "07/06.md"}
+      ]
+    },
+    {
+      "id": "08",
+      "title": "Year-End & Tax Preparation",
+      "description": "Close your books confidently, prepare for tax season, and avoid the most common costly mistakes.",
+      "icon": "bi-calendar-check",
+      "color": "#ef4444",
+      "lessons": [
+        {"id": "01", "title": "Closing the Books", "duration": "15 min", "file": "08/01.md"},
+        {"id": "02", "title": "Year-End Checklist", "duration": "12 min", "file": "08/02.md"},
+        {"id": "03", "title": "Preparing Reports for Your Accountant", "duration": "10 min", "file": "08/03.md"},
+        {"id": "04", "title": "Common Mistakes and How to Fix Them", "duration": "15 min", "file": "08/04.md"},
+        {"id": "05", "title": "Data Backup and Security Best Practices", "duration": "10 min", "file": "08/05.md"}
+      ]
+    }
+  ]
+}

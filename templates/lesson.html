@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson.title }} — QuickBooks Training{% endblock %}
+
+{% block content %}
+<div class="lesson-content">
+
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="lesson-breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+      <li class="breadcrumb-item text-muted">{{ module.title }}</li>
+      <li class="breadcrumb-item active" aria-current="page">{{ lesson.title }}</li>
+    </ol>
+  </nav>
+
+  <!-- Lesson header -->
+  <div class="lesson-header">
+    <div class="lesson-header-top">
+      <h1 class="lesson-title">{{ lesson.title }}</h1>
+      <div class="lesson-header-actions">
+        <span class="duration-badge">
+          <i class="bi bi-clock me-1"></i>{{ lesson.duration }}
+        </span>
+        <button
+          class="btn-complete"
+          id="completeBtn"
+          data-key="{{ module.id }}-{{ lesson.id }}"
+        >
+          <i class="bi bi-check2 me-1"></i>Mark Complete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lesson body -->
+  <article class="lesson-body">
+    {{ content_html | safe }}
+  </article>
+
+  <!-- Prev / Next navigation -->
+  <div class="lesson-nav">
+    {% if prev_lesson %}
+    <a
+      href="{{ url_for('lesson', module_id=prev_lesson[0], lesson_id=prev_lesson[1]) }}"
+      class="lesson-nav-btn prev"
+    >
+      <i class="bi bi-arrow-left me-2"></i>Previous Lesson
+    </a>
+    {% else %}
+    <span></span>
+    {% endif %}
+
+    {% if next_lesson %}
+    <a
+      href="{{ url_for('lesson', module_id=next_lesson[0], lesson_id=next_lesson[1]) }}"
+      class="lesson-nav-btn next"
+    >
+      Next Lesson<i class="bi bi-arrow-right ms-2"></i>
+    </a>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

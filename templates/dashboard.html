@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — QuickBooks Training{% endblock %}
+
+{% block content %}
+<div class="dashboard-content">
+  <div class="dashboard-header">
+    <h1>QuickBooks Training Program</h1>
+    <p>Complete all 8 modules to master QuickBooks for your business. Track your progress as you go.</p>
+  </div>
+
+  <div class="module-grid">
+    {% for mod in modules %}
+    <div class="module-card" style="--accent: {{ mod.color }}">
+      <div class="module-card-header">
+        <div class="module-icon" style="background: {{ mod.color }}">
+          <i class="bi {{ mod.icon }}"></i>
+        </div>
+        <span class="module-num">Module {{ loop.index }}</span>
+      </div>
+
+      <h3 class="module-card-title">{{ mod.title }}</h3>
+      <p class="module-card-desc">{{ mod.description }}</p>
+
+      <div class="module-meta">
+        <span><i class="bi bi-book me-1"></i>{{ mod.lessons | length }} lessons</span>
+        <span class="module-pct" data-module="{{ mod.id }}">0%</span>
+      </div>
+
+      <div class="progress mb-3" style="height: 6px;" role="progressbar">
+        <div
+          class="progress-bar"
+          data-progress-bar="{{ mod.id }}"
+          style="background: {{ mod.color }}; width: 0%"
+        ></div>
+      </div>
+
+      <a
+        href="{{ url_for('lesson', module_id=mod.id, lesson_id=mod.lessons[0].id) }}"
+        class="module-btn"
+        style="background: {{ mod.color }}"
+      >
+        <i class="bi bi-play-fill me-1"></i>Start Module
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
