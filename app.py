@@ -22,7 +22,8 @@ TRAINING_PASSWORD = os.environ.get("TRAINING_PASSWORD", "pbj2024")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "pbjadmin2024")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 
-DB_PATH = CONTENT_DIR / "progress.db"
+_data_dir = os.environ.get("DATA_DIR")
+DB_PATH = Path(_data_dir) / "progress.db" if _data_dir else CONTENT_DIR / "progress.db"
 
 MARKDOWN_EXTRAS = ["fenced-code-blocks", "tables", "header-ids", "strike", "task_list"]
 
