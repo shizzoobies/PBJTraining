@@ -80,12 +80,18 @@
                 </div>
               </td>
               <td>
-                <form method="POST" action="{{ url_for('admin_delete_path', token=token) }}"
-                      onsubmit="return confirm('Delete path &quot;{{ path.name }}&quot;? This link will stop working immediately.')">
-                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete path">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </form>
+                <div class="d-flex gap-1">
+                  <a href="{{ url_for('admin_path_progress', token=token) }}"
+                     class="btn btn-sm btn-outline-primary" title="View progress">
+                    <i class="bi bi-bar-chart"></i>
+                  </a>
+                  <form method="POST" action="{{ url_for('admin_delete_path', token=token) }}"
+                        onsubmit="return confirm('Delete path &quot;{{ path.name }}&quot;? This link will stop working immediately.')">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete path">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
             {% endfor %}

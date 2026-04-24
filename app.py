@@ -2,10 +2,11 @@ import os
 import json
 import re
 import secrets
+import sqlite3
 import markdown2
 import anthropic
 from datetime import date
-from flask import Flask, render_template, request, redirect, url_for, session, abort, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, abort, jsonify, g, make_response
 from dotenv import load_dotenv
 from functools import wraps
 from pathlib import Path
@@ -20,6 +21,8 @@ PATHS_FILE = CONTENT_DIR / "paths.json"
 TRAINING_PASSWORD = os.environ.get("TRAINING_PASSWORD", "pbj2024")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "pbjadmin2024")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+
+DB_PATH = CONTENT_DIR / "progress.db"
 
 MARKDOWN_EXTRAS = ["fenced-code-blocks", "tables", "header-ids", "strike", "task_list"]
 
@@ -39,6 +42,37 @@ def load_paths() -> dict:
 def save_paths(paths: dict):
     with open(PATHS_FILE, "w", encoding="utf-8") as f:
         json.dump(paths, f, indent=2)
+
+
+def get_db():
+    if "_db" not in g:
+        g._db = sqlite3.connect(str(DB_PATH))
+        g._db.row_factory = sqlite3.Row
+    return g._db
+
+
+@app.teardown_appcontext
+def close_db(error):
+    db = g.pop("_db", None)
+    if db:
+        db.close()
+
+
+def init_db():
+    with sqlite3.connect(str(DB_PATH)) as db:
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS progress (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                viewer_id TEXT NOT NULL,
+                path_token TEXT NOT NULL,
+                lesson_key TEXT NOT NULL,
+                completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(viewer_id, path_token, lesson_key)
+            )
+        """)
+
+
+init_db()
 
 
 def require_login(f):
@@ -226,7 +260,7 @@ def path_lesson(token, module_id, lesson_id):
         m, l = k.split("/")
         return url_for("path_lesson", token=token, module_id=m, lesson_id=l)
 
-    return render_template(
+    resp = make_response(render_template(
         "path_lesson.html",
         path=path,
         token=token,
@@ -237,7 +271,13 @@ def path_lesson(token, module_id, lesson_id):
         prev_url=key_to_url(prev_key),
         next_url=key_to_url(next_key),
         current_key=lesson_key,
-    )
+    ))
+    if not request.cookies.get("qb_viewer_id"):
+        resp.set_cookie(
+            "qb_viewer_id", secrets.token_urlsafe(16),
+            max_age=60 * 60 * 24 * 365, httponly=True, samesite="Lax"
+        )
+    return resp
 
 
 # ── Admin ─────────────────────────────────────────────────────────────────────
@@ -305,6 +345,71 @@ def admin_delete_path(token):
     paths.pop(token, None)
     save_paths(paths)
     return redirect(url_for("admin_dashboard"))
+
+
+# ── Progress Tracking ─────────────────────────────────────────────────────────
+
+@app.route("/api/progress", methods=["POST"])
+def api_progress():
+    data = request.json or {}
+    path_token = data.get("path_token", "")
+    lesson_key = data.get("lesson_key", "")
+    viewer_id = request.cookies.get("qb_viewer_id", "")
+
+    if not path_token or not lesson_key or not viewer_id:
+        return jsonify({"error": "Missing fields"}), 400
+
+    paths = load_paths()
+    path = paths.get(path_token)
+    if not path or lesson_key not in path["lessons"]:
+        return jsonify({"error": "Invalid"}), 403
+
+    db = get_db()
+    db.execute(
+        "INSERT OR IGNORE INTO progress (viewer_id, path_token, lesson_key) VALUES (?, ?, ?)",
+        (viewer_id, path_token, lesson_key),
+    )
+    db.commit()
+    return jsonify({"ok": True})
+
+
+@app.route("/admin/path/<token>/progress")
+@require_admin
+def admin_path_progress(token):
+    paths = load_paths()
+    path = paths.get(token)
+    if not path:
+        abort(404)
+
+    rows = get_db().execute(
+        "SELECT viewer_id, lesson_key, completed_at FROM progress WHERE path_token = ? ORDER BY completed_at",
+        (token,),
+    ).fetchall()
+
+    # Group completions by viewer
+    from collections import defaultdict
+    viewer_data = defaultdict(dict)
+    for row in rows:
+        viewer_data[row["viewer_id"]][row["lesson_key"]] = row["completed_at"]
+
+    # Build ordered lesson details for display
+    modules = load_modules()
+    lesson_details = {}
+    for key in path["lessons"]:
+        mid, lid = key.split("/")
+        mod = next((m for m in modules if m["id"] == mid), None)
+        les = next((l for l in mod["lessons"] if l["id"] == lid), None) if mod else None
+        if mod and les:
+            lesson_details[key] = {"module_title": mod["title"], "lesson_title": les["title"]}
+
+    return render_template(
+        "admin_progress.html",
+        path=path,
+        token=token,
+        viewer_data=viewer_data,
+        lesson_details=lesson_details,
+        path_lessons=path["lessons"],
+    )
 
 
 # ── AI Chat API ───────────────────────────────────────────────────────────────

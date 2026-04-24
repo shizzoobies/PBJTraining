@@ -53,14 +53,49 @@ function updateProgressUI() {
 const completeBtn = document.getElementById('completeBtn');
 if (completeBtn) {
   const key = completeBtn.dataset.key;
-  if (getCompleted()[key]) {
+  const alreadyDone = !!getCompleted()[key];
+
+  if (alreadyDone) {
     completeBtn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
     completeBtn.classList.add('done');
+  } else {
+    completeBtn.disabled = true;
+    completeBtn.classList.add('locked');
+    completeBtn.innerHTML = '<i class="bi bi-arrow-down me-1"></i>Scroll to unlock';
   }
-  completeBtn.addEventListener('click', () => {
+
+  // Unlock when learner reaches the bottom of lesson content
+  const sentinel = document.getElementById('lessonEnd');
+  if (sentinel && !alreadyDone) {
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        completeBtn.disabled = false;
+        completeBtn.classList.remove('locked');
+        completeBtn.innerHTML = '<i class="bi bi-check2 me-1"></i>Mark Complete';
+        observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+    observer.observe(sentinel);
+  }
+
+  completeBtn.addEventListener('click', async () => {
+    if (completeBtn.disabled) return;
     markComplete(key);
     completeBtn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
     completeBtn.classList.add('done');
+
+    // Server-side tracking for path learners
+    if (window.QB_PATH_TOKEN) {
+      const dash = key.indexOf('-');
+      const lessonKey = key.slice(0, dash) + '/' + key.slice(dash + 1);
+      try {
+        await fetch('/api/progress', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path_token: window.QB_PATH_TOKEN, lesson_key: lessonKey }),
+        });
+      } catch { /* non-critical — localStorage already saved */ }
+    }
   });
 }
 
