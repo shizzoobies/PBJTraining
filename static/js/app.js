@@ -149,6 +149,7 @@ async function sendChat() {
         messages: chatHistory,
         lesson_title: ctx.lessonTitle || '',
         module_title: ctx.moduleTitle || '',
+        path_token: window.QB_PATH_TOKEN || '',
       }),
     });
     const data = await resp.json();

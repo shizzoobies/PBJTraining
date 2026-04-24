@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ lesson.title }} — {{ path.name }}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- Top Nav -->
+<nav class="top-nav">
+  <div class="brand">
+    <span class="brand-badge">QB</span>
+    <span>{{ path.name }}</span>
+  </div>
+  <div class="nav-right">
+    <span class="progress-text" id="progress-display"></span>
+  </div>
+</nav>
+
+<!-- Mobile sidebar toggle -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar (path lessons only) -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-inner">
+    {% set ns = namespace(in_module=false) %}
+    {% for item in path_lesson_details %}
+      {% if item.show_module_header %}
+        {% if ns.in_module %}
+        </ul></div>
+        {% endif %}
+        <div class="sb-module">
+          <div class="sb-module-header" style="--accent: {{ item.module_color }}">
+            <span class="sb-dot"></span>
+            <span class="sb-mod-title">{{ item.module_title }}</span>
+          </div>
+          <ul class="sb-lessons">
+        {% set ns.in_module = true %}
+      {% endif %}
+        <li class="sb-lesson {% if item.key == current_key %}active{% endif %}">
+          <a href="{{ url_for('path_lesson', token=token, module_id=item.module_id, lesson_id=item.lesson_id) }}">
+            <span class="check-icon" data-key="{{ item.module_id }}-{{ item.lesson_id }}">
+              <i class="bi bi-circle"></i>
+            </span>
+            <span>{{ item.lesson_title }}</span>
+          </a>
+        </li>
+    {% endfor %}
+    {% if ns.in_module %}</ul></div>{% endif %}
+  </div>
+</aside>
+
+<!-- Main content -->
+<main class="main-content" id="mainContent">
+  <div class="lesson-content">
+
+    <nav aria-label="breadcrumb" class="lesson-breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item text-muted">{{ path.name }}</li>
+        <li class="breadcrumb-item text-muted">{{ module.title }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ lesson.title }}</li>
+      </ol>
+    </nav>
+
+    <div class="lesson-header">
+      <div class="lesson-header-top">
+        <h1 class="lesson-title">{{ lesson.title }}</h1>
+        <div class="lesson-header-actions">
+          <span class="duration-badge">
+            <i class="bi bi-clock me-1"></i>{{ lesson.duration }}
+          </span>
+          <button
+            class="btn-complete"
+            id="completeBtn"
+            data-key="{{ module.id }}-{{ lesson.id }}"
+          >
+            <i class="bi bi-check2 me-1"></i>Mark Complete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <article class="lesson-body">
+      {{ content_html | safe }}
+    </article>
+
+    <div class="lesson-nav">
+      {% if prev_url %}
+      <a href="{{ prev_url }}" class="lesson-nav-btn prev">
+        <i class="bi bi-arrow-left me-2"></i>Previous Lesson
+      </a>
+      {% else %}
+      <span></span>
+      {% endif %}
+
+      {% if next_url %}
+      <a href="{{ next_url }}" class="lesson-nav-btn next">
+        Next Lesson<i class="bi bi-arrow-right ms-2"></i>
+      </a>
+      {% endif %}
+    </div>
+
+  </div>
+</main>
+
+<!-- AI Chat FAB -->
+<button class="chat-fab" id="chatFab" title="Ask your AI tutor">
+  <i class="bi bi-robot"></i>
+</button>
+
+<!-- Chat Panel -->
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <i class="bi bi-robot me-2"></i>
+      <span>AI Tutor</span>
+      <small class="ms-2 opacity-75">Ask anything about QuickBooks</small>
+    </div>
+    <button class="chat-close" id="chatClose" aria-label="Close chat">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg assistant">
+      <div class="msg-bubble">Hi! I'm your QuickBooks AI tutor. Ask me anything about what you're learning — I'm here to help! 👋</div>
+    </div>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask a QuickBooks question..." autocomplete="off">
+    <button class="chat-send" id="chatSend" aria-label="Send">
+      <i class="bi bi-send-fill"></i>
+    </button>
+  </div>
+</div>
+
+<div class="chat-overlay" id="chatOverlay"></div>
+
+<script>
+  window.QB_CONTEXT = {
+    lessonTitle: "{{ lesson.title | replace('"', '\\"') }}",
+    moduleTitle: "{{ module.title | replace('"', '\\"') }}"
+  };
+  window.QB_PATH_TOKEN = "{{ token }}";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
