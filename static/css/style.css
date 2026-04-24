@@ -363,6 +363,29 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
   font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;
 }
 
+/* ── Path Cards (admin dashboard) ───────────────────────────────────────── */
+.path-card-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.path-card {
+  background: #fff; border-radius: 14px; padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  display: flex; flex-direction: column; gap: 0.85rem;
+}
+
+.path-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+
+.path-card-info { flex: 1; min-width: 0; }
+.path-card-name { font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem; }
+.path-card-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem;
+  font-size: 0.82rem; color: #64748b;
+}
+
+.path-card-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.path-card-link { display: flex; gap: 8px; }
+.path-card-link .form-control { font-size: 0.78rem; color: #64748b; }
+
 /* ── Progress Checklist ──────────────────────────────────────────────────── */
 .progress-checklist { display: flex; flex-direction: column; }
 
@@ -434,4 +457,14 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
   .chat-panel.open { right: 0; }
   .chat-fab { bottom: 76px; }
   .lesson-header-top { flex-direction: column; }
+
+  /* Admin mobile */
+  .admin-main { padding: 1.25rem 1rem; }
+  .admin-title { font-size: 1.35rem; }
+  .admin-card { padding: 1.25rem; }
+  .path-card { padding: 1rem; }
+  .path-card-link { flex-direction: column; }
+  .path-card-link .btn { width: 100%; }
+  .picker-module-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .progress-lesson-time { display: none; }
 }
